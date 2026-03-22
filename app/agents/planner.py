@@ -11,8 +11,15 @@ model = ChatHuggingFace(llm=llm)
 
 def planner_agent(state):
     query = state.query
+    history = state.history
+
+    context = ""
+    if history:
+        context = f"Previous queries: {history[-2:]}"
 
     prompt = f'''
+        context: {context}
+
         Break this research query into 4-6 subtopics:
         Query: {query}'''
     

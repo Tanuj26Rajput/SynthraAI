@@ -1,5 +1,6 @@
 from langgraph.graph import StateGraph, START, END
 from app.graph.state import GraphState
+from app.memory.memory import load_history
 
 from app.agents.planner import planner_agent
 from app.agents.search import search_agent
@@ -17,10 +18,16 @@ def build_graph():
 
     def ranking_node(state):
         return {"ranked_sources": rank_sources(state.search_results)}
-    
     builder.add_node("ranking", ranking_node)
 
-    builder.add_edge(START, "planner")
+    def load_memory_node(state):
+        history = load_history(state.session_id)
+        return {"history": history}
+    builder.add_node("load_memory", load_memory_node)
+
+
+    builder.add_edge(START, "load_memory")
+    builder.add_edge("load_memory", "planner")
     builder.add_edge("planner", "search")
     builder.add_edge("search", "ranking")
     builder.add_edge("ranking", "critic")

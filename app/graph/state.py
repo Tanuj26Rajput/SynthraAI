@@ -11,3 +11,4 @@ class GraphState(BaseModel):
     approved: bool = False
     final_report: str = ""
     history: List[Dict[str, Any]] = []
+    session_id: str = ""
