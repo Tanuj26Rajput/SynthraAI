@@ -1,18 +1,25 @@
 from langchain_community.utilities import SerpAPIWrapper
-from langchain_core.tools import Tool
+from dotenv import load_dotenv
+
+load_dotenv()
 
 search = SerpAPIWrapper()
-search_tool = Tool(
-    name="google_search",
-    description="Seach google for real-time information and news.",
-    func=search.run
-)
 
 def search_agent(state):
     results = []
-
-    for topic in state.plan:
+    for topic in state.plan[:3]:  # limit topics
         data = search.results(topic)
-        results.extend(data)
 
-    return {"search_results": results}
+        organic = data.get("organic_results", [])
+
+        for item in organic[:5]:  # limit results
+            results.append({
+                "title": item.get("title", ""),
+                "url": item.get("link", ""),
+                "snippet": item.get("snippet", "")
+            })
+
+    return {
+        "search_results": results,
+        "timeline": state.timeline + [f"🌐 Search: Found {len(results)} results"]
+}
