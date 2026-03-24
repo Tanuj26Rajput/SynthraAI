@@ -12,3 +12,4 @@ class GraphState(BaseModel):
     final_report: str = ""
     history: List[Dict[str, Any]] = []
     session_id: str = ""
+    timeline: list = []
