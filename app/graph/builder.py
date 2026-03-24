@@ -14,10 +14,12 @@ def build_graph():
     builder.add_node("planner", planner_agent)
     builder.add_node("search", search_agent)
     builder.add_node("critic", critic_agent)
-    builder.add_node("writer", writer_agent)
 
     def ranking_node(state):
-        return {"ranked_sources": rank_sources(state.search_results)}
+        return {
+            "ranked_sources": rank_sources(state.search_results),
+            "timeline": state.timeline + ["📊 Ranking: Ranked sources"]
+        }
     builder.add_node("ranking", ranking_node)
 
     def load_memory_node(state):
@@ -25,21 +27,11 @@ def build_graph():
         return {"history": history}
     builder.add_node("load_memory", load_memory_node)
 
-
     builder.add_edge(START, "load_memory")
     builder.add_edge("load_memory", "planner")
     builder.add_edge("planner", "search")
     builder.add_edge("search", "ranking")
     builder.add_edge("ranking", "critic")
-
-    def decision(state):
-        if "APPROVED" in state.critique:
-            return "writer"
-        elif state.refinement_count < 2:
-            return "search"
-        else:
-            return "writer"
         
-    builder.add_conditional_edges("critic", decision)
-    builder.add_edge("writer", END)
+    builder.add_edge("critic", END)
     return builder.compile()
