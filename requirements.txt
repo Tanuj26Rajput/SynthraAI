@@ -1,0 +1,6 @@
+google-search-results
+pymongo
+uuid
+fastapi
+langchain-google-genai
+streamlit
