@@ -2,7 +2,7 @@ from pymongo import MongoClient
 from datetime import datetime
 from app.graph.state import GraphState
 
-client = MongoClient("mongodb://localhost:27017/")
+client = MongoClient("mongodb+srv://Tanuj26Rajput:Tanuj1@cluster0.eilpujk.mongodb.net/gadgetry", serverSelectionTimeoutMS=2000)
 db = client["synthra"]
 collection = db["sessions"]
 
