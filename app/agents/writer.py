@@ -6,7 +6,6 @@ from langsmith import traceable
 load_dotenv()
 client_gemini = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
-@traceable['llm_invoke']
 def gemi_invoke(prompt: str) -> str:
     try:
         response = client_gemini.models.generate_content(
@@ -28,7 +27,6 @@ def gemi_invoke(prompt: str) -> str:
 #     temperature=0.7,
 # )
 
-@traceable['writer_agent']
 def writer_agent(state):
     data_summary = "\n".join([
         f"{i+1}. {s['title']} ({s['url']}): {s['snippet']}"

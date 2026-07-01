@@ -4,3 +4,4 @@ uuid
 fastapi
 langchain-google-genai
 streamlit
+langgraph
