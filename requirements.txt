@@ -5,3 +5,4 @@ fastapi
 langchain-google-genai
 streamlit
 langgraph
+python-dotenv
